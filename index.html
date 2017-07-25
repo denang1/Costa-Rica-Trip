@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>CIEE Monteverde, Costa Rica Summer Abroad</title>
+    </head>
+
+    <body>
+        <div id="top-nav">
+            <img src="images/ciee.gif" style="height:7%" id="ciee-logo">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <img src="images/costa-rica.gif" id="costa-logo">
+        </div>
+
+        <!-- Content -->
+        <div id="grid" class="grid">
+            <div class="grid-sizer"></div>
+            <div id="myModal" class="modal">
+                <span class="close">&times</span>
+                <img class="modal-content" id="modal-img">
+            </div>
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        <!-- Imports -->
+        <script type="text/javascript" src="https://unpkg.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>        
+        <script>
+            var baseUrl = "images/slideshow-images/";
+            var numImages = 10;
+            var imageList = [];
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("modal-img");
+            var navBar = document.getElementById("top-nav");
+            
+
+            for(var count = 1; count <= numImages; count++) {
+                imageList.push(`${baseUrl}/${count}.jpg`);
+            }
+
+            setBodyMargin();
+            loadImages(imageList);
+
+            function loadImages(imageList) {
+                var numLoaded = 0;
+                var grid = document.querySelector('.grid');
+                imageList.map(imageSrc => {
+                    setTimeout(function() {
+                        // create grid-item div
+                        var gridItem = document.createElement('div');
+                        gridItem.setAttribute('class', 'grid-item');
+
+                        // create image
+                        var img = document.createElement('img');
+                        
+                        img.onload = function() {
+                            numLoaded++;
+                            img.setAttribute('id', 'img'+numLoaded);
+                            img.addEventListener("click", clickImage);
+
+                            if(numLoaded === imageList.length) {
+                                var msnry = new Masonry(grid, {
+                                    percentPosition: true,
+                                    itemSelector: '.grid-item',
+                                    columnWidth: '.grid-sizer'
+                                });
+                            }
+                        }
+                        img.src = imageSrc;
+
+                        // append to DOM
+                        gridItem.appendChild(img);
+                        grid.appendChild(gridItem);
+                    }, 200);                    
+                });                
+            }
+            
+            function clickImage() {
+                modal.style.display = "block";
+                navBar.style.display = "none";
+
+                modalImg.src = this.src;
+
+            }
+
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function() {
+                modal.style.display = "none";
+                navBar.style.display = "block";
+            }
+
+            function setBodyMargin() {
+                var navBar = document.getElementById("top-nav");
+                var content = document.getElementById("grid");
+
+                content.style.marginTop = navBar.offsetHeight;
+            }
+            function getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+
+           
+        </script>
+
+    </body>
+</html>
